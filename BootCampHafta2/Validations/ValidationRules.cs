@@ -16,21 +16,9 @@ namespace BootCampHafta2.Validations
                 WithMessage("1945-11-111 ile 2002-1010 tarhileri arasını giriniz.");
 
             //email içerisinde özel karakter olmamamsı için gerekli validasyon ve dönen mesaj.
-            RuleFor(x => x.Email).Custom((email, context) => 
-            {
-                var arr = new[] {'0','1','2','3','4','5','6','7','8','9','-','|','[',']',
-                '_','!','*','^','%','&','/','=','?','(',')','>','<','#','$','½','{','}'};
-                for (int i = 0; i < email.Length; i++)
-                {
-                    for (int j = 0; j < arr.Length; j++)
-                    {
-                        if (email[i] == arr[j])
-                        {
-                            context.AddFailure("Email içerisinde . harici özel karakter bulunamaz");
-                        }
-                    }
-                }
-            });
+            RuleFor(x => x.Email).Matches(new Regex(@"^[a-zA-Z\.@]{2,100}$")).
+               WithMessage("Email içerisinde özel karakter olmamalı.");
+
             //telefon numarasının + ile başlama validasyonu
             RuleFor(x => x.PhoneNumber).Must(PhoneNumber => 
             PhoneNumber.StartsWith("+")).
